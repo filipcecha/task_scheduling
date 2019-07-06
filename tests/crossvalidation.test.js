@@ -24,8 +24,8 @@ describe('test getting data basis from field', () => {
 
 describe('test setting trigger fields structure', () => {
   test('get trigger fields from fields data basis', () => {
-    expect(getTriggerFields({ name: 'FIELD2', dataBasis: 'FIELD1' })).toEqual({'FIELD1': {}});
-    expect(getTriggerFields({ name: 'FIELD2', dataBasis: 'FIELD1,FIELD3' })).toEqual({'FIELD1': {}, 'FIELD3': {}});
+    expect(getTriggerFields({ name: 'FIELD2', dataBasis: 'FIELD1' })).toEqual({'FIELD1': []});
+    expect(getTriggerFields({ name: 'FIELD2', dataBasis: 'FIELD1,FIELD3' })).toEqual({'FIELD1': [], 'FIELD3': []});
   })
   test('set triggier fields struture without depandand fields', () => {
     let depandandFields = [
@@ -34,7 +34,7 @@ describe('test setting trigger fields structure', () => {
       { name: 'FIELD3', dataBasis: 'FIELD1,FIELD2' },
     ];
 
-    let expected = {'FIELD1': {}, 'FIELD2': {}, 'FIELD3': {}};
+    let expected = {'FIELD1': [], 'FIELD2': [], 'FIELD3': []};
     expect(setTriggerFieldsStructure(depandandFields)).toEqual(expected);
 
     depandandFields = [
@@ -43,7 +43,7 @@ describe('test setting trigger fields structure', () => {
       { name: 'FIELD3', dataBasis: 'FIELD1' },
     ];
 
-    expected = {'FIELD1': {}, 'FIELD3': {}};
+    expected = {'FIELD1': [], 'FIELD3': []};
     expect(setTriggerFieldsStructure(depandandFields)).toEqual(expected);
   })
   test('get all fields to be changed on trigger', () => {
@@ -72,11 +72,15 @@ describe('test setting trigger fields structure', () => {
     
     let currentField = { name: 'FIELD3', dataBasis: 'FIELD1' };
     let fieldsToChangeSorted = [];
-    expect(fieldIsNextInSequence(fieldName, fieldsToChange, fieldsToChangeSorted, currentField)).toBeTruthy()
+    expect(fieldIsNextInSequence(fieldsToChange, fieldsToChangeSorted, currentField)).toBeTruthy()
 
     currentField = { name: 'FIELD4', dataBasis: 'FIELD3' };
     fieldsToChangeSorted = ['FIELD3'];
-    expect(fieldIsNextInSequence(fieldName, fieldsToChange, fieldsToChangeSorted, currentField)).toBeTruthy()
+    expect(fieldIsNextInSequence(fieldsToChange, fieldsToChangeSorted, currentField)).toBeTruthy()
+
+    currentField = { name: 'FIELD2', dataBasis: 'FIELD1,FIELD3,FIELD7' };
+    fieldsToChangeSorted = ['FIELD3', 'FIELD4'];
+    expect(fieldIsNextInSequence(fieldsToChange, fieldsToChangeSorted, currentField)).toBeTruthy()
 
   })
 
@@ -88,7 +92,8 @@ describe('test setting trigger fields structure', () => {
       { name: 'FIELD6', dataBasis: 'FIELD5' },
     ];
 
-    // expect(setUpdateSequence('FIELD5', depandandFields)).toEqual(['FIELD6']);
-    // expect(setUpdateSequence('FIELD1', depandandFields)).toEqual(['FIELD3', 'FIELD4', 'FIELD2']);
+    expect(setUpdateSequence('FIELD5', depandandFields)).toEqual(['FIELD6']);
+    expect(setUpdateSequence('FIELD1', depandandFields)).toEqual(['FIELD3', 'FIELD4', 'FIELD2']);
+    expect(setUpdateSequence('FIELD3', depandandFields)).toEqual(['FIELD2', 'FIELD4']);
   })
 })

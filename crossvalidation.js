@@ -1,11 +1,11 @@
 function getDataBasis (field) {
-    return field.dataBasis.split(',') || [];
+    return field.dataBasis.split(',');
 }
 
 function getTriggerFields(depandandField) {
     var triggeFields = {}
     getDataBasis(depandandField).forEach(function (field) {
-        triggeFields[field] = {}
+        triggeFields[field] = []
     });
     return triggeFields;
 }
@@ -32,8 +32,8 @@ function getAllDepandandFields (fieldName, depandandFields) {
     return fieldsToChange.filter(function (field, index, ftc) { return index === ftc.indexOf(field)});
 }
 
-function fieldIsNextInSequence(fieldName, fieldsToChange, fieldsToChangeSorted, currentField) {
-    var dataBasis = getDataBasis(currentField)
+function fieldIsNextInSequence(fieldsToChange, fieldsToChangeSorted, currentField) {
+    var dataBasis = getDataBasis(currentField);
 
     function fieldIsInFieldsToChange (field) {
         return fieldsToChange.indexOf(field) !== -1;
@@ -43,11 +43,16 @@ function fieldIsNextInSequence(fieldName, fieldsToChange, fieldsToChangeSorted, 
         return fieldsToChangeSorted.indexOf(field) !== -1
     }
 
+    function allDependenciesAreSatisfied(dataBasis) {
+        var dependency = dataBasis.filter(function (field) {
+            return fieldIsInFieldsToChange(field) && !fieldIsInSortedFiels(field);
+        })
+        return dependency.length === 0;
+    }
+
     var hasSingleDataBasis = dataBasis.length === 1;
 
-    console.log(fieldIsInFieldsToChange(dataBasis[0]));
-    return (hasSingleDataBasis && !fieldIsInFieldsToChange(dataBasis[0])) || 
-           (hasSingleDataBasis && fieldIsInSortedFiels(dataBasis[0]));
+    return (hasSingleDataBasis && (!fieldIsInFieldsToChange(dataBasis[0]) ||  fieldIsInSortedFiels(dataBasis[0]))) || allDependenciesAreSatisfied(dataBasis);
 }
 
 function setUpdateSequence (fieldName, depandandFields) {
@@ -57,15 +62,16 @@ function setUpdateSequence (fieldName, depandandFields) {
     // sort update sequence
     var index = 0;
     while (fieldsToChange.length !== fieldsToChangeSorted.length) {
-        index > fieldsToChange.length ? index = 0 : index++;
+        if (index > fieldsToChange.length) index = 0;
         
         var currentField = depandandFields.filter(function (field) {
             return field.name === fieldsToChange[index];
-        });
-
-        if (fieldIsNextInSequence(fieldName, fieldsToChange, fieldsToChangeSorted, currentField)) {
+        })[0];
+        
+        if (currentField && fieldIsNextInSequence(fieldsToChange, fieldsToChangeSorted, currentField)) {
             fieldsToChangeSorted.push(currentField.name);
         }
+        index++;
     }
 
     return fieldsToChangeSorted;
