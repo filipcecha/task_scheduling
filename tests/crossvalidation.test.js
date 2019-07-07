@@ -96,4 +96,21 @@ describe('test setting trigger fields structure', () => {
     expect(setUpdateSequence('FIELD1', depandandFields)).toEqual(['FIELD3', 'FIELD4', 'FIELD2']);
     expect(setUpdateSequence('FIELD3', depandandFields)).toEqual(['FIELD2', 'FIELD4']);
   })
+  test('set update sequences for all trigger fields', () => {
+    let depandandFields = [
+      { name: 'FIELD2', dataBasis: 'FIELD1,FIELD3,FIELD7' },
+      { name: 'FIELD4', dataBasis: 'FIELD3' },
+      { name: 'FIELD3', dataBasis: 'FIELD1' },
+      { name: 'FIELD6', dataBasis: 'FIELD5' },
+    ];
+
+    let triggerSequence = {
+      'FIELD1': ['FIELD3', 'FIELD4', 'FIELD2'],
+      'FIELD3': ['FIELD4', 'FIELD2'],
+      'FIELD5': ['FIELD6'],
+      'FIELD7': ['FIELD2']
+    }
+
+    expect(setTriggerFieldsUpdateSequence(depandandFields)).toEqual(triggerSequence);
+  })
 })
