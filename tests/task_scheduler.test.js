@@ -1,12 +1,12 @@
-const taks_scheduler = require('../taks_scheduler');
+const task_scheduler = require('../task_scheduler');
 
-const getDataBasis = taks_scheduler.getDataBasis;
-const getTriggerFields = taks_scheduler.getTriggerFields;
-const setTriggerFieldsStructure = taks_scheduler.setTriggerFieldsStructure;
-const getAllDependentFields = taks_scheduler.getAllDependentFields;
-const fieldIsNextInSequence = taks_scheduler.fieldIsNextInSequence;
-const setUpdateSequence = taks_scheduler.setUpdateSequence;
-const setTriggerFieldsUpdateSequence = taks_scheduler.setTriggerFieldsUpdateSequence;
+const getDataBasis = task_scheduler.getDataBasis;
+const getTriggerFields = task_scheduler.getTriggerFields;
+const setTriggerFieldsStructure = task_scheduler.setTriggerFieldsStructure;
+const getAllDependentFields = task_scheduler.getAllDependentFields;
+const fieldIsNextInSequence = task_scheduler.fieldIsNextInSequence;
+const setUpdateSequence = task_scheduler.setUpdateSequence;
+const setTriggerFieldsUpdateSequence = task_scheduler.setTriggerFieldsUpdateSequence;
 
 describe('test getting data basis from field', () => {
   test('get fields data basis with one basis', () => {
