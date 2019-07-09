@@ -6,6 +6,7 @@ const setTriggerFieldsStructure = crossvalidation.setTriggerFieldsStructure;
 const getAllDepandandFields = crossvalidation.getAllDepandandFields;
 const fieldIsNextInSequence = crossvalidation.fieldIsNextInSequence;
 const setUpdateSequence = crossvalidation.setUpdateSequence;
+const setTriggerFieldsUpdateSequence = crossvalidation.setTriggerFieldsUpdateSequence;
 
 const depandandFields_v1 = [
   { name: 'FIELD2', dataBasis: 'FIELD1' },
@@ -106,7 +107,7 @@ describe('test setting trigger fields structure', () => {
 
     let triggerSequence = {
       'FIELD1': ['FIELD3', 'FIELD4', 'FIELD2'],
-      'FIELD3': ['FIELD4', 'FIELD2'],
+      'FIELD3': ['FIELD2', 'FIELD4'],
       'FIELD5': ['FIELD6'],
       'FIELD7': ['FIELD2']
     }

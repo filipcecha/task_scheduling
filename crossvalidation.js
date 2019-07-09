@@ -77,6 +77,17 @@ function setUpdateSequence (fieldName, depandandFields) {
     return fieldsToChangeSorted;
 }
 
+function setTriggerFieldsUpdateSequence (depandandFields) {
+    var triggerFieldStructure = setTriggerFieldsStructure(depandandFields);
+
+    Object.keys(triggerFieldStructure).forEach(function (triggerField) {
+        var fieldUpdateSequence = setUpdateSequence(triggerField, depandandFields);
+        triggerFieldStructure[triggerField] = fieldUpdateSequence;
+    })
+
+    return triggerFieldStructure;
+}
+
 module.exports = {
     getTriggerFields: getTriggerFields,
     getDataBasis: getDataBasis,
@@ -84,4 +95,5 @@ module.exports = {
     getAllDepandandFields: getAllDepandandFields,
     fieldIsNextInSequence: fieldIsNextInSequence,
     setUpdateSequence: setUpdateSequence,
+    setTriggerFieldsUpdateSequence: setTriggerFieldsUpdateSequence,
 };
