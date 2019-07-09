@@ -1,8 +1,8 @@
 {
-  "name": "crossvalidacja",
+  "name": "task_scheduler",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "taks_scheduler.js",
   "dependencies": {
     "jest": "^24.8.0"
   },

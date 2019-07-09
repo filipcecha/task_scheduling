@@ -10,21 +10,21 @@ function getTriggerFields(depandandField) {
     return triggeFields;
 }
 
-function setTriggerFieldsStructure (depandandFields) {
+function setTriggerFieldsStructure (dependentFields) {
     triggerFieldsStructure = {};
-    depandandFields.forEach(function (depandandField) {
+    dependentFields.forEach(function (depandandField) {
         Object.assign(triggerFieldsStructure, getTriggerFields(depandandField));
     });
     return triggerFieldsStructure;
 }
 
-function getAllDepandandFields (fieldName, depandandFields) {
+function getAllDependentFields (fieldName, dependentFields) {
     var fieldsToChange = []
 
-    depandandFields.forEach(function (field) {
+    dependentFields.forEach(function (field) {
         if (getDataBasis(field).indexOf(fieldName) !== -1) {
             fieldsToChange.push(field.name);
-            getAllDepandandFields(field.name, depandandFields).forEach(function (field) {
+            getAllDependentFields(field.name, dependentFields).forEach(function (field) {
                 fieldsToChange.push(field);
             });
         }
@@ -55,8 +55,8 @@ function fieldIsNextInSequence(fieldsToChange, fieldsToChangeSorted, currentFiel
     return (hasSingleDataBasis && (!fieldIsInFieldsToChange(dataBasis[0]) ||  fieldIsInSortedFiels(dataBasis[0]))) || allDependenciesAreSatisfied(dataBasis);
 }
 
-function setUpdateSequence (fieldName, depandandFields) {
-    var fieldsToChange = getAllDepandandFields(fieldName, depandandFields);
+function setUpdateSequence (fieldName, dependentFields) {
+    var fieldsToChange = getAllDependentFields(fieldName, dependentFields);
     var fieldsToChangeSorted = []
     
     // sort update sequence
@@ -64,7 +64,7 @@ function setUpdateSequence (fieldName, depandandFields) {
     while (fieldsToChange.length !== fieldsToChangeSorted.length) {
         if (index > fieldsToChange.length) index = 0;
         
-        var currentField = depandandFields.filter(function (field) {
+        var currentField = dependentFields.filter(function (field) {
             return field.name === fieldsToChange[index];
         })[0];
         
@@ -77,11 +77,11 @@ function setUpdateSequence (fieldName, depandandFields) {
     return fieldsToChangeSorted;
 }
 
-function setTriggerFieldsUpdateSequence (depandandFields) {
-    var triggerFieldStructure = setTriggerFieldsStructure(depandandFields);
+function setTriggerFieldsUpdateSequence (dependentFields) {
+    var triggerFieldStructure = setTriggerFieldsStructure(dependentFields);
 
     Object.keys(triggerFieldStructure).forEach(function (triggerField) {
-        var fieldUpdateSequence = setUpdateSequence(triggerField, depandandFields);
+        var fieldUpdateSequence = setUpdateSequence(triggerField, dependentFields);
         triggerFieldStructure[triggerField] = fieldUpdateSequence;
     })
 
@@ -92,7 +92,7 @@ module.exports = {
     getTriggerFields: getTriggerFields,
     getDataBasis: getDataBasis,
     setTriggerFieldsStructure: setTriggerFieldsStructure,
-    getAllDepandandFields: getAllDepandandFields,
+    getAllDependentFields: getAllDependentFields,
     fieldIsNextInSequence: fieldIsNextInSequence,
     setUpdateSequence: setUpdateSequence,
     setTriggerFieldsUpdateSequence: setTriggerFieldsUpdateSequence,
